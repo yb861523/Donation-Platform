@@ -8,7 +8,7 @@ import {
   X
 } from 'lucide-react';
 
-const Navbar = ({ darkMode, toggleDarkMode }) => {
+const Navbar = ({ darkMode, toggleDarkMode, user, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -27,7 +27,20 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             <Link to="/donate" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">Donate</Link>
             <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">About</Link>
             <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">Contact</Link>
-            
+            <Link to="/admin/login" className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors font-medium">Admin</Link>
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-green-700 dark:text-green-400 font-semibold">Hello, {user.name}</span>
+                <button
+                  onClick={onLogout}
+                  className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors font-medium"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">Login</Link>
+            )}
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-full bg-green-100 dark:bg-gray-700 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-gray-600 transition-all"
@@ -59,6 +72,20 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               <Link to="/donate" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium px-4" onClick={() => setMobileMenuOpen(false)}>Donate</Link>
               <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium px-4" onClick={() => setMobileMenuOpen(false)}>About</Link>
               <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium px-4" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+              <Link to="/admin/login" className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors font-medium px-4" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
+              {user ? (
+                <div className="flex items-center space-x-2 mx-4">
+                  <span className="text-green-700 dark:text-green-400 font-semibold">Hello, {user.name}</span>
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); onLogout && onLogout(); }}
+                    className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors font-medium"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link to="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium mx-4" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+              )}
             </div>
           </div>
         )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import { API_URLS } from '../config/api';
 import { 
   Users, 
   MapPin, 
@@ -14,10 +15,31 @@ import {
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    impact: {
+      familiesHelped: 2847,
+      mealsProvided: 15420,
+      clothingItems: 8932,
+      successRate: 98
+    }
+  });
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(API_URLS.stats);
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+        // Keep default values if API fails
+      }
+    };
+
+    fetchStats();
+    setLoading(false);
   }, []);
 
 
@@ -75,7 +97,7 @@ const HomePage = () => {
           <BentoCard className="lg:col-span-1">
             <Star className="h-10 w-10 text-yellow-500 mb-4" />
             <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-3">Success Stories</h3>
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">50K+</div>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">{stats.impact?.mealsProvided?.toLocaleString() || '50,000'}+</div>
             <p className="text-gray-600 dark:text-gray-300 text-sm">Meals donated and families helped this year</p>
           </BentoCard>
 

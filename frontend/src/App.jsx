@@ -4,14 +4,30 @@ import HomePage from './pages/HomePage';
 import DonatePage from './pages/DonatePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1000);
+    // Load user from localStorage on mount
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
     return () => clearTimeout(timer);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
 
   if (loading) {
     return (
@@ -26,6 +42,11 @@ function App() {
     );
   }
 
+  // Helper to inject user and logout into Layout
+  const withLayout = (Component) => (
+    <Component.type {...Component.props} />
+  );
+
   return (
     <Router>
       <Routes>
@@ -33,7 +54,13 @@ function App() {
         <Route path="/donate" element={<DonatePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/login" element={<LoginPage setUser={setUser} />} />
+        <Route path="/register" element={<RegisterPage setUser={setUser} />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        {/* Pass user and onLogout to Layout via props */}
       </Routes>
+      {/* If you use Layout globally, pass user and onLogout here */}
     </Router>
   );
 }

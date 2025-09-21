@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, user, onLogout }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
-      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} user={user} onLogout={onLogout} />
       <main className="pt-16">
         {children}
       </main>
